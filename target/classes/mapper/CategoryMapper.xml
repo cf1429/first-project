@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.CategoryDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.Category" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="ExtraCategoryMap" type="com.using.cms.bean.extra.ExtraCategory" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <association property="extraContentInfos" select="selectContentInfo" column="{id=id,type=type}" fetchType="eager"></association>
+  </resultMap>
+
+  <resultMap id="ExtraContentInfoMap" type="com.using.cms.bean.extra.ExtraContentInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="cover_file_id" property="coverFileId" jdbcType="INTEGER" />
+    <result column="editor_charge" property="editorCharge" jdbcType="VARCHAR" />
+    <result column="browse_number" property="browseNumber" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="sum_info" property="sumInfo" jdbcType="VARCHAR" />
+    <result column="data_source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="content_source" property="contentSource" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="CLOB" />
+    <result column="banner_link" property="bannerLink" jdbcType="VARCHAR" />
+    <result column="top_time" property="topTime" jdbcType="TIMESTAMP"/>
+    <result column="top_flag" property="topFlag" jdbcType="INTEGER"></result>
+    <association property="coverFile" select="selectFileUploadById" column="cover_file_id" fetchType="eager"></association>
+  </resultMap>
+
+  <delete id="delete" parameterType="integer">
+    delete from category where id = #{id}
+  </delete>
+
+  <insert id="insert" parameterType="com.using.cms.bean.Category">
+    insert into category(id,`name`,`type`,create_time)
+    values
+    (#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},NOW())
+  </insert>
+
+  <update id="update" parameterType="com.using.cms.bean.Category">
+    update category
+    <set>
+      <if test="name != null and name != ''">
+        `name` = #{name,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="selectListByMap" parameterType="map" resultMap="BaseResultMap">
+     select * from category where `type` = #{type}
+  </select>
+
+  <select id="selectOne" resultType="com.using.cms.bean.Category" resultMap="BaseResultMap">
+     select * from category where `name` = #{name} and `type` = #{type}
+  </select>
+
+  <select id="selectCategoryContentInfoList" parameterType="map" resultMap="ExtraCategoryMap">
+    select * from category where `type` = #{type}
+  </select>
+
+  <select id="selectContentInfo" parameterType="map" resultMap="ExtraContentInfoMap">
+    select * from content_info
+    where category_id = #{id} and state = 2
+    order by top_time desc, release_time desc
+    <if test="type == 1">
+      limit 3
+    </if>
+    <if test="type == 2">
+      limit 5
+    </if>
+  </select>
+
+  <select id="selectFileUploadById" parameterType="integer" resultType="com.using.cms.bean.FileUpload">
+      SELECT
+    	 *
+      FROM
+    	 file_upload
+      WHERE
+    	 id = #{id}
+  </select>
+</mapper>

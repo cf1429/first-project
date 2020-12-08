@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.RoleDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.Role" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.using.cms.bean.Role" >
+    insert into role (
+	    name,
+	    code,
+	    content,
+	    type,
+	    create_user,
+	    state,
+	    create_time
+    )values (
+	    #{name},
+	    #{code},
+	    #{content},
+	    #{type},
+	    #{createUser},
+	    #{state},
+	    now()
+    )
+  </insert>
+  <update id="update" parameterType="com.using.cms.bean.Role" >
+    update role
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="code != null" >
+        code = #{code},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="type != null and type != 0" >
+        type = #{type},
+      </if>
+      <if test="createUser != null and createUser != 0" >
+        create_user = #{createUser},
+      </if>
+      <if test="state != null and state != 0" >
+        state = #{state},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

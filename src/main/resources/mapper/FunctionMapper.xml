@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.FunctionDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.Function" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="resource_id" property="resourceId" jdbcType="VARCHAR" />
+    <result column="resource_icon" property="resourceIcon" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.using.cms.bean.Function" >
+    insert into function (
+	    name,
+	    resource_url, 
+	    content, 
+	    resource_id, 
+	    resource_icon, 
+	    state,
+	    type,
+	    pid,
+	    level,
+	    sort,
+	    create_time
+    )values (
+	    #{name}, 
+	    #{resourceUrl},
+	    #{content}, 
+	    #{resourceId}, 
+	    #{resourceIcon}, 
+	    #{state},
+	    #{type},
+	    #{pid},
+	    #{level},
+	    #{sort},
+	    now()
+    )
+  </insert>
+  <update id="update" parameterType="com.using.cms.bean.Function" >
+    update function
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="resourceUrl != null" >
+        resource_url = #{resourceUrl},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="resourceId != null" >
+        resource_id = #{resourceId},
+      </if>
+      <if test="resourceIcon != null" >
+        resource_icon = #{resourceIcon},
+      </if>
+      <if test="state != null" >
+        state = #{state},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+      <if test="level != null" >
+        level = #{level},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from function
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <sql id="whereConditions">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="id != null and id !=''"  > and `id`= #{id}</if>
+			<if test="name != null and name !=''"  > and `name`= #{name}</if>
+			<if test="resourceUrl != null and resourceUrl !=''"  > and `resource_url` like CONCAT('%',#{resourceUrl},'%')</if>
+			<if test="content != null and content !=''"  > and `content` like CONCAT('%',#{content},'%')</if>
+			<if test="resourceId != null and resourceId !=''"  > and `resource_id`= #{resourceId}</if>
+			<if test="resourceIcon != null and resourceIcon !=''"  > and `resource_icon`= #{resourceIcon}</if>
+			<if test="state != null and state !=''"  > and `state`= #{state}</if>
+			<if test="type != null and type !=''"  > and `type`= #{type}</if>
+			<if test="pid != null and pid !=''"  > and `pid`= #{pid}</if>
+			<if test="level != null and level !=''"  > and `level`= #{level}</if>
+		</trim>
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from function
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="listByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT *  from function u
+       <include refid="whereConditions" />
+        ORDER BY u.id desc
+  </select>
+  <select id="selectChildren" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from function
+    where pid = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectParent" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from function
+    where id = #{pid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectFunctionByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT
+	f.*
+	FROM
+		function f
+	WHERE
+		EXISTS (
+			SELECT
+				rf.id
+			FROM
+				user_function rf
+			WHERE
+			f.id = rf.function_id
+			AND 
+			rf.role_id = #{roleId,jdbcType=INTEGER}
+	)
+  </select>
+
+
+  <select id="selectFunctionByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT
+	f.*
+	FROM
+		function f
+	WHERE
+		EXISTS (
+			SELECT
+				rf.id
+			FROM
+				user_function rf
+			WHERE
+			f.id = rf.function_id
+			AND
+			rf.user_id = #{userId,jdbcType=INTEGER} and rf.state = 0
+	)
+  </select>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.UserFunctionDao" >
+    <resultMap id="BaseResultMap" type="com.using.cms.bean.UserFunction" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="function_id" property="functionId" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <insert id="insert" parameterType="com.using.cms.bean.UserFunction" >
+        insert into user_function (
+        user_id,
+        function_id,
+        state,
+        create_time
+        )values (
+        #{roleId},
+        #{functionId},
+        #{state},
+        now()
+        )
+    </insert>
+
+    <delete id="deleteByRoleId" parameterType="java.lang.Integer" >
+        delete from user_function
+        where user_id = #{roleId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into user_function
+        (
+        user_id,
+        function_id,
+        state,
+        create_time
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userId,jdbcType=INTEGER},
+            #{item.functionId,jdbcType=INTEGER},
+            #{item.state,jdbcType=INTEGER},
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <select id="findFunctionByUserId" parameterType="integer" resultType="map">
+        SELECT
+        	uf.id,
+        	f.name,
+        	uf.state
+        FROM
+        	users u
+          INNER JOIN user_function uf ON uf.user_id = u.id
+          INNER JOIN `function` f ON f.id = uf.function_id
+        WHERE u.id = #{userId}
+    </select>
+    <update id="updateListById" parameterType="list">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update user_function
+            <set>
+                state = #{item.state}
+            </set>
+            <where>
+                1 = 2
+                <if test="item.id != null">
+                    or id = #{item.id}
+                </if>
+            </where>
+        </foreach>
+    </update>
+    
+    <select id="findUserFunctionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from user_function where user_id = #{userId};
+    </select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.UserDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.Users" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="ismaster" property="ismaster" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="roleId" property="userType" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="dept_id" property="deptId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="whereConditions">
+    where 1=1
+    <trim  suffixOverrides="," >
+      <if test="qname != null and qname !=''"  > and (u.`name`like CONCAT('%',#{qname},'%') or u.`user_name` like CONCAT('%',#{qname},'%'))</if>
+      <if test="orgId != null and orgId != 0 "  > and u.`company_id`= #{orgId}</if>
+      <if test="roleId != null and roleId != 0 "  > and u.`role_id`= #{roleId}</if>
+      <if test="state != null and state != 0 "  > and u.`state`= #{state}</if>
+    </trim>
+  </sql>
+
+  <select id="selectByUserName" resultType="com.using.cms.bean.extra.ExtUser" parameterType="java.lang.String" >
+    select * from users where user_name = #{userName}
+  </select>
+
+  <select id="listByMap" parameterType="java.util.Map" resultType ="com.using.cms.bean.extra.ExtUser">
+    SELECT u.*,
+    cru.name createUserName,
+    role.name as roleName
+    from users u
+    left join users cru on u.create_user = cru.id
+    left join role role on u.role_id = role.id
+    <include refid="whereConditions" />
+    ORDER BY u.id desc
+  </select>
+
+  <select id="queryMasterByOrgId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select mu.* from users mu left join role mr on mu.role_id = mr.id
+
+    where mu.company_id = #{orgId}  and mr.type = 2 and mu.state = 1
+  </select>
+
+  <insert id="insert" parameterType="com.using.cms.bean.Users" useGeneratedKeys="true" keyProperty="id">
+    insert into users (
+	    user_name,
+	    password,
+	    name,
+	    tel,
+	    create_user,
+	    ismaster,
+	    state,
+	    role_id,
+	    company_id,
+	    dept_id,
+	    create_time
+    )values (
+	    #{userName},
+	    #{password},
+	    #{name},
+	    #{tel},
+	    #{createUser},
+	    #{ismaster},
+	    #{state},
+	    #{roleId},
+	    #{companyId},
+	    #{deptId},
+	    now()
+    )
+  </insert>
+
+  <select id="selectByUserId" resultType ="com.using.cms.bean.extra.ExtUser" parameterType="java.lang.Integer" >
+    select
+        u.*,
+        cru.name as createUserName,
+        role.name as roleName
+    from users u
+    left join users cru on u.create_user = cru.id
+    left join role role on u.role_id = role.id
+    where u.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <update id="update" parameterType="com.using.cms.bean.Users" >
+    update users
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel},
+      </if>
+      <if test="ismaster != null and ismaster != 0" >
+        ismaster = #{ismaster},
+      </if>
+      <if test="state != null and state != 0" >
+        state = #{state},
+      </if>
+      <if test="roleId != null and roleId != 0" >
+        role_id = #{roleId},
+      </if>
+      <if test="companyId != null and companyId != 0" >
+        company_id = #{companyId},
+      </if>
+      <if test="deptId != null and deptId != 0" >
+        dept_id = #{deptId},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteById" parameterType="integer">
+      DELETE
+        u.*,
+        uf.*
+      FROM
+      	users u
+      	INNER JOIN user_function uf ON uf.user_id = u.id
+      WHERE
+      	u.id = #{userId}
+  </delete>
+
+
+  <delete id="deleteByKey" parameterType="java.lang.Integer">
+      DELETE from users where id = #{userId}
+  </delete>
+
+</mapper>

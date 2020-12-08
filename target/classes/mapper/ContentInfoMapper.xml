@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.ContentInfoDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.ContentInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="cover_file_id" property="coverFileId" jdbcType="INTEGER" />
+    <result column="editor_charge" property="editorCharge" jdbcType="VARCHAR" />
+    <result column="browse_number" property="browseNumber" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="sum_info" property="sumInfo" jdbcType="CLOB" />
+    <result column="data_source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="content_source" property="contentSource" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="CLOB" />
+    <result column="banner_link" property="bannerLink" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="ExtraContentInfoMap" type="com.using.cms.bean.extra.ExtraContentInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="cover_file_id" property="coverFileId" jdbcType="INTEGER" />
+    <result column="editor_charge" property="editorCharge" jdbcType="VARCHAR" />
+    <result column="browse_number" property="browseNumber" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="sum_info" property="sumInfo" jdbcType="CLOB" />
+    <result column="data_source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="content_source" property="contentSource" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="CLOB" />
+    <result column="banner_link" property="bannerLink" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="INTEGER" />
+    <result column="top_flag" property="topFlag"/>
+    <association property="coverFile" select="selectFileUploadByCoverFileId" column="cover_file_id" fetchType="eager" />
+    <association property="file" select="selectFileUploadByCoverFileId" column="file_id" fetchType="eager" />
+  </resultMap>
+
+  <select id="selectByMap" parameterType="map" resultMap="ExtraContentInfoMap">
+    select
+        ci.*,
+        c.name AS categoryName
+    from content_info ci
+    LEFT JOIN category c ON ci.category_id = c.id
+    where 1=1
+    <if test="id != null and id != ''">
+      and ci.id = #{id}
+    </if>
+    <if test="categoryId != null and categoryId != ''">
+      and ci.category_id = #{categoryId}
+    </if>
+    <if test="keyWord != null and keyWord != ''">
+      and
+      (
+        ci.title like CONCAT('%',#{keyWord},'%')
+      <!--or-->
+        <!--ci.sum_info like CONCAT('%',#{keyWord},'%')-->
+      )
+    </if>
+    <if test="contentSource != null and contentSource != ''">
+      and ci.content_source = #{contentSource}
+    </if>
+    <if test="state != null and state != 0">
+      and ci.state = #{state}
+    </if>
+    <if test="type != null and type != ''">
+      and ci.type = #{type}
+    </if>
+    <if test="sort != null and sort != ''">
+      order by ci.${sort} desc
+    </if>
+  </select>
+
+  <select id="selectFileUploadByCoverFileId" parameterType="integer" resultType="com.using.cms.bean.FileUpload">
+      SELECT
+    	 *
+      FROM
+    	 file_upload
+      WHERE
+    	 id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="com.using.cms.bean.ContentInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into content_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="coverFileId != null" >
+        cover_file_id,
+      </if>
+      <if test="editorCharge != null" >
+        editor_charge,
+      </if>
+      <if test="browseNumber != null" >
+        browse_number,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="sumInfo != null" >
+        sum_info,
+      </if>
+      <if test="dataSource != null" >
+        data_source,
+      </if>
+      <if test="contentSource != null" >
+        content_source,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="releaseTime != null" >
+        release_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="bannerLink != null" >
+        banner_link,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="coverFileId != null" >
+        #{coverFileId},
+      </if>
+      <if test="editorCharge != null" >
+        #{editorCharge},
+      </if>
+      <if test="browseNumber != null" >
+        #{browseNumber},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="sumInfo != null" >
+        #{sumInfo},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource},
+      </if>
+      <if test="contentSource != null" >
+        #{contentSource},
+      </if>
+      <if test="state != null" >
+        #{state},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="releaseTime != null" >
+        #{releaseTime},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="bannerLink != null" >
+        #{bannerLink},
+      </if>
+      <if test="fileId != null" >
+        #{fileId},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.using.cms.bean.ContentInfo">
+    update content_info
+    <set>
+      <if test="categoryId != null" >
+        category_id = #{categoryId},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="coverFileId != null" >
+        cover_file_id = #{coverFileId},
+      </if>
+      <if test="editorCharge != null" >
+        editor_charge = #{editorCharge},
+      </if>
+      <if test="browseNumber != null" >
+        browse_number = #{browseNumber},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="sumInfo != null" >
+        sum_info = #{sumInfo},
+      </if>
+      <if test="dataSource != null" >
+        data_source = #{dataSource},
+      </if>
+      <if test="contentSource != null and contentSource != 0" >
+        content_source = #{contentSource},
+      </if>
+      <if test="state != null and state != 0" >
+        state = #{state},
+      </if>
+      <if test="type != null and type != 0">
+        type = #{type},
+      </if>
+      <if test="releaseTime != null" >
+        release_time = #{releaseTime},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="bannerLink != null" >
+        banner_link = #{bannerLink},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId},
+      </if>
+      <if test="topTime != null ">
+        top_time = #{topTime},
+      </if>
+      <if test="topFlag != null ">
+        top_flag = #{topFlag},
+      </if>
+    </set>
+    <where>
+        id = #{id}
+    </where>
+  </update>
+
+  <delete id="delete" parameterType="string">
+    delete from content_info where id in (${value})
+  </delete>
+   <!-- 根据条件查询数据-->
+  <select id="selectContentInfo" parameterType="map" resultType="map">
+      select * from  content_info
+      <where>
+          <if test="topFlag != null and topFlag != '' ">
+              and top_flag = #{topFlag}
+          </if>
+          <if test="contentInfoType != null and contentInfoType != '' ">
+            and type = #{contentInfoType}
+
+          </if>
+      </where>
+
+  </select>
+
+  <update id="update2" parameterType="com.using.cms.bean.ContentInfo">
+    update content_info
+    <set>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+        top_time = #{topTime},
+      <if test="topFlag != null ">
+        top_flag = #{topFlag},
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </update>
+</mapper>

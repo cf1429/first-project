@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.FileUploadDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.FileUpload" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_Path" property="filePath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.using.cms.bean.FileUpload" useGeneratedKeys="true" keyProperty="id">
+    insert into file_upload(id,file_name,file_path,create_time)
+    values
+    (#{id,jdbcType=INTEGER},#{fileName,jdbcType=VARCHAR},#{filePath,jdbcType=VARCHAR},NOW())
+  </insert>
+  <select id="selectById" parameterType="integer" resultMap="BaseResultMap">
+    select * from file_upload where id = #{id}
+  </select>
+
+</mapper>

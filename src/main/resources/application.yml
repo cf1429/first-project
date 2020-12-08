@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: frist-project-cf
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    favicon:
+      enabled: false
+  http:
+    multipart: 
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    druid:
+      driverClassName: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  configuration:
+    # 缓存的全局开关
+    cache-enabled: true
+    # 延迟加载的全局开关
+    lazy-loading-enabled: true
+    # 等待数据库响应的秒数
+    default-statement-timeout: 600
+    # 开启自动驼峰命名规则映射
+    map-underscore-to-camel-case: true
+    # 当没有为参数提供特定的 JDBC 类型时，为空值指定 JDBC 类型
+    # NULL VARCHAR OTHER
+    jdbc-type-for-null: 'NULL'
+    # 指定当结果集中值为 null 的时候是否调用映射对象的 setter（map 对象时为 put）方法
+    call-setters-on-nulls: false
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+
+using:
+  system:
+    version: ${project.version}
+    auth:
+      loginUrl: /
+      excludeUrl: '/filing/evidences,/api/login,/static/css/**,/static/images/**,/static/fonts/**,/static/img/**,/static/js/**,/zcss/**,/register/**,/api/verify/code,/api/checkPhone,/favicon.ico,/index.html'

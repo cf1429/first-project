@@ -1,0 +1,84 @@
+server:
+  port: 8088
+  context-path: /
+  compression:
+    enabled: true
+  session:
+    timeout: 10000
+  tomcat:
+    uri-encoding: UTF-8
+    basedir: /home/temp/tempFile
+#    basedir: D:\tmp
+spring:
+#  dubbo:
+#    registry:
+#      #address: 114.115.250.167:2181
+#      address: 192.168.1.101:2181
+#    provider:
+#      timeout: 3000000
+#      port: 25998
+#    consumer:
+#      timeout: 3000000
+#      check: false
+#      retries: 0
+  redis:
+#    host: 114.115.250.167
+    host: 192.168.1.101
+    port: 6379
+#    password: JL1wC5FX
+    password: xiaozhi
+    # 5秒钟
+    timeout: 5000
+  http:
+    multipart:
+      #location: /home/temp/tempFile
+      location: D:\tmp
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.1.125:3306/zhizhong-cms?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useInformationSchema=true&autoReconnect=true&failOverReadOnly=false
+      username: root
+      password: ?dwKl0>ou?%&1
+      # 初始化连接大小
+      initialSize: 0
+      # 连接池最大使用连接数量
+      maxActive: 20
+      # 连接池最小空闲
+      minIdle: 0
+      # 获取连接最大等待时间
+      maxWait: 60000
+      validationQuery: SELECT 1
+      testOnBorrow: false
+      testOnReturn: false
+      testWhileIdle: true
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 25200000
+      # 打开removeAbandoned功能
+      removeAbandoned: true
+      # 1800秒，也就是30分钟
+      removeAbandonedTimeout: 1800
+      # 关闭abanded连接时输出错误日志
+      logAbandoned: true
+      # 监控数据库
+      filters: stat
+      stat-view-servlet:
+        url-pattern: /druid/*
+using:
+  system:
+    serverUrl: http://127.0.0.1:8082/api
+    videoUrl: https://yun.youzhengkeji.com:3004/view/index.html#/
+    file:
+      sysName: ${spring.application.name}
+      baseUrl: http://114.115.250.167:8001
+      uploadUrl: ${using.system.file.baseUrl}/file/upload/${using.system.file.sysName}/{businessType}
+      infoUrl: ${using.system.file.baseUrl}/file/info/${using.system.file.sysName}/{fileInfoId}
+      downloadUrl: ${using.system.file.baseUrl}/file/download/${using.system.file.sysName}/{fileInfoId}
+      fileBasePath: D:\tmp
+      serverUrl: http://192.168.1.27:8088
+  token:
+    sql:
+      expir: 43200
+    cache:
+      expir: 24
+ 

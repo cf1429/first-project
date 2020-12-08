@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.using.cms.dao.LeavingDao" >
+  <resultMap id="BaseResultMap" type="com.using.cms.bean.Leaving" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="selectAll" resultType="com.using.cms.bean.Leaving">
+    select * from leaving
+  </select>
+
+  <insert id="insert" parameterType="com.using.cms.bean.Leaving">
+    insert into leaving(id,`name`,phone,content,create_time)
+    values (#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},NOW())
+  </insert>
+
+</mapper>

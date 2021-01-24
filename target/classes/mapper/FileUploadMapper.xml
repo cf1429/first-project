@@ -13,7 +13,7 @@
     (#{id,jdbcType=INTEGER},#{fileName,jdbcType=VARCHAR},#{filePath,jdbcType=VARCHAR},NOW())
   </insert>
   <select id="selectById" parameterType="integer" resultMap="BaseResultMap">
-    select * from file_upload where id = #{id}
+    select id,file_name,file_path from file_upload where id = #{id}
   </select>
 
 </mapper>

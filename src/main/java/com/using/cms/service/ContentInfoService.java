@@ -20,4 +20,8 @@ public interface ContentInfoService {
 
     int update2(ContentInfo contentInfo);
 
+    List<ExtraContentInfo> findContentInfoDetail (Map<String,Object> param);
+
+    List<ExtraContentInfo> selectContentByMap(Map<String,Object> param);
+
 }

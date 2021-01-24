@@ -60,19 +60,20 @@
   </update>
 
   <select id="selectListByMap" parameterType="map" resultMap="BaseResultMap">
-     select * from category where `type` = #{type}
+     select id,name,type,create_time from category where `type` = #{type}
   </select>
 
   <select id="selectOne" resultType="com.using.cms.bean.Category" resultMap="BaseResultMap">
-     select * from category where `name` = #{name} and `type` = #{type}
+     select id,name,type,create_time from category where `name` = #{name} and `type` = #{type}
   </select>
 
   <select id="selectCategoryContentInfoList" parameterType="map" resultMap="ExtraCategoryMap">
-    select * from category where `type` = #{type}
+    select id,name,type,create_time from category where `type` = #{type}
   </select>
 
   <select id="selectContentInfo" parameterType="map" resultMap="ExtraContentInfoMap">
-    select * from content_info
+    select id,category_id,title,cover_file_id,editor_charge,browse_number,sort,sum_info,data_source,content_source,state,
+    type,file_id,banner_link,release_time,top_flag,update_time,create_time from content_info
     where category_id = #{id} and state = 2
     order by top_time desc, release_time desc
     <if test="type == 1">
@@ -85,7 +86,7 @@
 
   <select id="selectFileUploadById" parameterType="integer" resultType="com.using.cms.bean.FileUpload">
       SELECT
-    	 *
+    	 id,file_name,file_path
       FROM
     	 file_upload
       WHERE

@@ -48,8 +48,12 @@
 
   <select id="selectByMap" parameterType="map" resultMap="ExtraContentInfoMap">
     select
-        ci.*,
+        ci.id,ci.category_id,ci.title,ci.cover_file_id,ci.editor_charge,ci.browse_number,ci.sort,ci.sum_info,ci.data_source,ci.content_source,ci.state,
+        ci.type,ci.file_id,ci.banner_link,ci.release_time,ci.top_flag,ci.update_time,ci.create_time,
         c.name AS categoryName
+    <!--<if test="type != null and type != '' and type =3 ">-->
+        <!--,ci.content-->
+    <!--</if>-->
     from content_info ci
     LEFT JOIN category c ON ci.category_id = c.id
     where 1=1
@@ -83,7 +87,7 @@
 
   <select id="selectFileUploadByCoverFileId" parameterType="integer" resultType="com.using.cms.bean.FileUpload">
       SELECT
-    	 *
+    	 id,file_name,file_path
       FROM
     	 file_upload
       WHERE
@@ -305,4 +309,55 @@
       id = #{id}
     </where>
   </update>
+
+  <select id="findContentInfoDetail" parameterType="map" resultMap="ExtraContentInfoMap">
+    select
+    ci.id,ci.category_id,ci.title,ci.cover_file_id,ci.editor_charge,ci.browse_number,ci.sort,ci.sum_info,ci.data_source,ci.content_source,ci.state,
+    ci.type,ci.file_id,ci.banner_link,ci.release_time,ci.top_flag,ci.update_time,ci.create_time,ci.content,
+    c.name AS categoryName
+    from content_info ci
+    LEFT JOIN category c ON ci.category_id = c.id
+    where 1=1
+    <if test="id != null and id != ''">
+      and ci.id = #{id}
+    </if>
+
+  </select>
+
+  <select id="selectContentByMap" parameterType="map" resultMap="ExtraContentInfoMap">
+    select
+    ci.id,ci.category_id,ci.title,ci.cover_file_id,ci.editor_charge,ci.browse_number,ci.sort,ci.sum_info,ci.data_source,ci.content_source,ci.state,
+    ci.type,ci.file_id,ci.banner_link,ci.release_time,ci.top_flag,ci.update_time,ci.create_time,
+    c.name AS categoryName,ci.content
+    from content_info ci
+    LEFT JOIN category c ON ci.category_id = c.id
+    where 1=1
+    <if test="id != null and id != ''">
+      and ci.id = #{id}
+    </if>
+    <if test="categoryId != null and categoryId != ''">
+      and ci.category_id = #{categoryId}
+    </if>
+    <if test="keyWord != null and keyWord != ''">
+      and
+      (
+      ci.title like CONCAT('%',#{keyWord},'%')
+      <!--or-->
+      <!--ci.sum_info like CONCAT('%',#{keyWord},'%')-->
+      )
+    </if>
+    <if test="contentSource != null and contentSource != ''">
+      and ci.content_source = #{contentSource}
+    </if>
+    <if test="state != null and state != 0">
+      and ci.state = #{state}
+    </if>
+    <if test="type != null and type != ''">
+      and ci.type = #{type}
+    </if>
+    <if test="sort != null and sort != ''">
+      order by ci.${sort} desc
+    </if>
+  </select>
+
 </mapper>

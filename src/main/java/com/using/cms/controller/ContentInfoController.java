@@ -116,7 +116,12 @@ public class ContentInfoController {
         param.put("pageNum",pageNum);
         param.put("pageSize",pageSize);
 
-        List<ExtraContentInfo> contentInfos = contentInfoService.selectByMap(param);
+        List<ExtraContentInfo> contentInfos = new ArrayList<>();
+        if(type == 3 && state ==2 ){
+            contentInfos = contentInfoService.selectContentByMap(param);
+        }else{
+            contentInfos = contentInfoService.selectByMap(param);
+        }
         Map<String,List<ExtraContentInfo>> map = new HashMap<>();
         if(!CollectionUtils.isEmpty(contentInfos)){
             for(ExtraContentInfo extraContentInfo : contentInfos){
@@ -159,7 +164,7 @@ public class ContentInfoController {
         Map<String,Object> param = new HashMap<>();
         param.put("id",id);
 
-        List<ExtraContentInfo> contentInfos = contentInfoService.selectByMap(param);
+        List<ExtraContentInfo> contentInfos = contentInfoService.findContentInfoDetail(param);
         if(contentInfos.isEmpty()){
             throw new BusinessException(ErrorEnum.ERROR_PARAM, "没有该数据！");
         }
@@ -185,7 +190,7 @@ public class ContentInfoController {
         Map<String,Object> param = new HashMap<>();
         param.put("id",id);
 
-        List<ExtraContentInfo> contentInfos = contentInfoService.selectByMap(param);
+        List<ExtraContentInfo> contentInfos = contentInfoService.findContentInfoDetail(param);
         if(contentInfos.isEmpty()){
             throw new BusinessException(ErrorEnum.ERROR_PARAM, "没有该数据！");
         }

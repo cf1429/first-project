@@ -53,4 +53,18 @@ public class ContentInfoServiceImpl implements ContentInfoService {
     public int update2(ContentInfo contentInfo) {
         return contentInfoDao.update2(contentInfo);
     }
+
+    @Override
+    public List<ExtraContentInfo> findContentInfoDetail(Map<String, Object> param) {
+        return contentInfoDao.findContentInfoDetail(param);
+    }
+    @Override
+    public List<ExtraContentInfo> selectContentByMap(Map<String,Object> param){
+        if(null != param.get("pageNum") && !StringUtils.isEmpty(param.get("pageNum").toString()) &&
+                null!=param.get("pageSize") && !StringUtils.isEmpty(param.get("pageSize").toString())){
+            PageHelper.startPage(Integer.parseInt(param.get("pageNum").toString()), Integer.parseInt(param.get("pageSize").toString()));
+        }
+        return contentInfoDao.selectContentByMap(param);
+
+    }
 }

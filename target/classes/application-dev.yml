@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8086
   context-path: /
   compression:
     enabled: true
@@ -23,10 +23,10 @@ spring:
 #      retries: 0
   redis:
 #    host: 114.115.250.167
-    host: 192.168.1.101
+    host: 8.133.170.159
     port: 6379
 #    password: JL1wC5FX
-    password: xiaozhi
+#    password: 123456
     # 5秒钟
     timeout: 5000
   http:
@@ -35,9 +35,9 @@ spring:
       location: D:\tmp
   datasource:
     druid:
-      url: jdbc:mysql://192.168.1.125:3306/zhizhong-cms?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useInformationSchema=true&autoReconnect=true&failOverReadOnly=false
+      url: jdbc:mysql://8.133.170.159:3306/official-website?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useInformationSchema=true&autoReconnect=true&failOverReadOnly=false
       username: root
-      password: ?dwKl0>ou?%&1
+      password: qq58521
       # 初始化连接大小
       initialSize: 0
       # 连接池最大使用连接数量
@@ -64,21 +64,29 @@ spring:
       filters: stat
       stat-view-servlet:
         url-pattern: /druid/*
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 using:
   system:
-    serverUrl: http://127.0.0.1:8082/api
+    serverUrl: http://8.133.170.159:8082/api
     videoUrl: https://yun.youzhengkeji.com:3004/view/index.html#/
     file:
       sysName: ${spring.application.name}
-      baseUrl: http://114.115.250.167:8001
-      uploadUrl: ${using.system.file.baseUrl}/file/upload/${using.system.file.sysName}/{businessType}
-      infoUrl: ${using.system.file.baseUrl}/file/info/${using.system.file.sysName}/{fileInfoId}
-      downloadUrl: ${using.system.file.baseUrl}/file/download/${using.system.file.sysName}/{fileInfoId}
-      fileBasePath: D:\tmp
-      serverUrl: http://192.168.1.27:8088
+      baseUrl: http://8.133.170.159:8001
+      uploadUrl: ${using.system.file.baseUrl}/file/upload/{businessType}
+      infoUrl: ${using.system.file.baseUrl}/file/info/{fileInfoId}
+      downloadUrl: ${using.system.file.baseUrl}/file/download/{fileInfoId}
+      #fileBasePath: E://tomcatUpload
+      fileBasePath: /home/tomcat/uploadFile
+      serverUrl: http://8.133.170.159:8082
   token:
     sql:
       expir: 43200
     cache:
       expir: 24
+logging:
+  level:
+    com.using.cms.dao: DEBUG
  

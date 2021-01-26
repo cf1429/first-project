@@ -52,7 +52,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             fu = new FileUpload();
             fu.setFileName(filename);
-            fu.setFilePath(fileConfig.getServerUrl() + relativePath);
+            fu.setFilePath(fileConfig.getServerUrl() + "/upload/"+relativePath);
 
             // 保存文件
             String filePath = fileConfig.getFileBasePath() + relativePath;

@@ -20,7 +20,6 @@ com\using\cms\config\FileConfig.class
 com\using\cms\util\AbstractBaseCache.class
 com\using\cms\FristProjectCfApplication$1.class
 com\using\cms\config\SpringMvcConfig.class
-com\using\cms\config\WebConfig.class
 com\using\cms\dao\CategoryDao.class
 com\using\cms\util\ErrorEnum.class
 com\using\cms\controller\BaseController.class
@@ -79,6 +78,7 @@ com\using\cms\bean\Users.class
 com\using\cms\config\MyBatisConfig.class
 com\using\cms\bean\UserFunction.class
 com\using\cms\controller\FileController.class
+com\using\cms\config\CorsConfig.class
 com\using\cms\FristProjectCfApplication.class
 com\using\cms\service\impl\ContentInfoServiceImpl.class
 com\using\cms\filter\LoginFilter.class

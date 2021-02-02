@@ -1,7 +1,6 @@
 package com.using.cms.filter;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -17,15 +16,15 @@ public class CORSFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-		response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
-		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "x-requested-with");
-		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, OPTIONS, DELETE");
-		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
-		response.setHeader(HttpHeaders.PRAGMA, "No-Cache");
-		response.setHeader(HttpHeaders.EXPIRES, "0");
+//		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+//		response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
+//		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "x-requested-with");
+//		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, OPTIONS, DELETE");
+//		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
+//		response.setHeader(HttpHeaders.PRAGMA, "No-Cache");
+//		response.setHeader(HttpHeaders.EXPIRES, "0");
 		chain.doFilter(servletRequest, response);
-//		corsFilter();
+		//corsFilter();
 		/*HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		response.setHeader("Access-Control-Allow-Origin","null");
